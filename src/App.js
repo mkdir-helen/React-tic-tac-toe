@@ -109,7 +109,7 @@ class App extends Component {
         <div className="board">
           {this.renderBoxes()}
         </div>
-        <button disabled={!this.state.winner} onClick={()=> this.reset()}>Reset</button>
+        <button disabled={!this.state.winner && this.state.tie === false} onClick={()=> this.reset()}>Reset</button>
       </div>
     );
   }
