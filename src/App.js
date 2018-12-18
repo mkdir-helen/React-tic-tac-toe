@@ -9,7 +9,9 @@ class App extends Component {
     this.state = {
       board: Array(9).fill(null),
       player: null,
-      winner: null
+      winner: null,
+      winArray: [],
+      tie: false
     }
   }
 
@@ -26,6 +28,7 @@ class App extends Component {
       ['2', '4', '6']
     ]
     this.checkMatch(winLines);
+    this.checkTie();
     
   }
   checkMatch(winLines){
@@ -33,12 +36,24 @@ class App extends Component {
       const[a, b, c] = winLines[index];
       let board = this.state.board;
       if(board[a] && board[a] === board[b] && board[a] === board[c]){
-        alert('You won');
+        let Array = [a, b, c];
+        let winArray = Array.map((x) => {return parseInt(x)});
+        console.log(winArray);
+        // alert('You won');
         this.setState({
-          winner: this.state.player
+          winner: this.state.player,
+          winArray: [...winArray]
         })
       }
     }    
+  }
+
+  checkTie(){
+    if(this.state.winner === null && !this.state.board.includes(null)){
+      this.setState({
+        tie: true
+      })
+    }
   }
 
   handleClick(index){
@@ -51,6 +66,7 @@ class App extends Component {
           player: this.state.player === "X" ? "O" : "X"
         })
         this.checkWinner();
+        this.checkTie();
       }
     }
   }
@@ -65,7 +81,9 @@ class App extends Component {
     this.setState({
       player: null,
       winner: null,
-      board: Array(9).fill(null)
+      board: Array(9).fill(null),
+      winArray: [],
+      tie: false
     })
   }
   renderBoxes(){
@@ -77,6 +95,7 @@ class App extends Component {
       </div>
       )
   }
+  
   render() {
     
     return (
@@ -85,6 +104,7 @@ class App extends Component {
         <Status player={this.state.player} 
         setPlayer={(e)=>(this.setPlayer(e))}
         winner={this.state.winner}
+        tie={this.state.tie}
         />
         <div className="board">
           {this.renderBoxes()}
