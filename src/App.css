@@ -26,4 +26,10 @@
   display: inline-flex;
   flex-wrap: wrap;
   width: 320px;
+  margin: 50px 0 0 100px;
+  font-size: 2rem;
+}
+
+.playerchoice label {
+  margin-right: 20px;
 }

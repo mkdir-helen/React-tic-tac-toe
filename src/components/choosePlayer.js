@@ -8,7 +8,9 @@ class Player extends Component {
     }
     render(){
         return (
-            <form onSubmit={(e) => this.handleForm(e)}>
+            <form 
+            className='playerchoice'
+            onSubmit={(e) => this.handleForm(e)}>
                 <label>
                     Player X
                     <input type="radio" name="player" value="X" />
