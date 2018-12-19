@@ -13,6 +13,8 @@ class App extends Component {
       winArray: [],
       tie: false,
       turn: true,
+      human: null,
+      computer: null
     }
   }
 
@@ -28,11 +30,15 @@ class App extends Component {
       ['0', '4','8'],
       ['2', '4', '6']
     ]
-    this.checkMatch(winLines);
+    let winner = this.checkMatch(winLines);
+    this.setState({
+      winner
+    })
     this.checkTie();
     
   }
   checkMatch(winLines){
+    let winner = '';
     for(let index = 0; index<winLines.length; index++){
       const[a, b, c] = winLines[index];
       let board = this.state.board;
@@ -40,12 +46,13 @@ class App extends Component {
         let Array = [a, b, c];
         let winArray = Array.map((x) => {return parseInt(x)});
         console.log(winArray);
+        winner = this.state.player;
         this.setState({
-          winner: this.state.player,
           winArray: [...winArray]
         })
       }
-    }    
+    }
+    return winner;    
   }
 
   checkTie(){
@@ -110,11 +117,19 @@ class App extends Component {
       turn: true
     })
   }
+
+  minmax(newBoard, player){
+    let availIndexArray = this.getEmptySpots();
+
+
+  }
  
 
   setPlayer(player){
     this.setState({
-      player
+      player,
+      human:player,
+      computer: player === "O" ? "X" : "O"
     })
   }
 
@@ -126,6 +141,8 @@ class App extends Component {
       winArray: [],
       tie: false,
       turn: true,
+      computer: null,
+      human: null
     })
   }
   renderBoxes(){
