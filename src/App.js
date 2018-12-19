@@ -3,6 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import Status from './components/Status';
 
+let winLines = 
+    [
+      ["0", "1", "2"],
+      ["3", "4", "5"],
+      ["6", "7","8"],
+      ["0", "3", "6"],
+      ["1", "4", "7"],
+      ["2", "5", '8'],
+      ['0', '4','8'],
+      ['2', '4', '6']
+    ]
 class App extends Component {
   constructor(props){
     super(props);
@@ -19,17 +30,7 @@ class App extends Component {
   }
 
   checkWinner(){
-    let winLines = 
-    [
-      ["0", "1", "2"],
-      ["3", "4", "5"],
-      ["6", "7","8"],
-      ["0", "3", "6"],
-      ["1", "4", "7"],
-      ["2", "5", '8'],
-      ['0', '4','8'],
-      ['2', '4', '6']
-    ]
+  
     let winner = this.checkMatch(winLines);
     this.setState({
       winner
@@ -104,7 +105,7 @@ class App extends Component {
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
     console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
-    if(!this.state.winner && this.state.turn === false){
+    if(!this.state.winner && this.state.turn === false && this.state.tie ===false){
       newBoard[randomIndex] = this.state.player;
       this.setState({
         board: newBoard
@@ -116,12 +117,23 @@ class App extends Component {
       player: this.state.player === "O" ? "X" : "O",
       turn: true
     })
+    this.checkTie();
   }
 
   minmax(newBoard, player){
     let availIndexArray = this.getEmptySpots();
-
-
+    if(this.checkMatch(winLines, newBoard) === this.state.human){
+      return {score: -10};
+    }else if(this.checkMatch(winLines, newBoard) === this.state.computer){
+      return {score: 10};
+    }else if(this.checkTie()){
+      return {score:0};
+    }
+    let moves = [];
+    for(let i= 0; i<availIndexArray.length; i++){
+      let move = {};
+      
+    }
   }
  
 
