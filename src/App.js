@@ -98,7 +98,11 @@ class App extends Component {
     console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
     if(!this.state.winner && this.state.turn === false){
-      newBoard[randomIndex] = this.state.player;
+      if(this.state.board[4]===null){
+        newBoard[randomIndex] = this.state.player;
+      }else{
+        newBoard[newIndex] = this.state.player;
+      }
       this.setState({
         board: newBoard
       })
