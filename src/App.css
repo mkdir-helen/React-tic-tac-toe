@@ -33,3 +33,16 @@
 .playerchoice label {
   margin-right: 20px;
 }
+.reset {
+  display: block;
+  margin: 40px auto;
+}
+.reset:disabled{
+  cursor:not-allowed;
+  color: grey;
+}
+.reset:enabled{
+  background: gold;
+  color: black;
+  cursor:pointer;
+}
