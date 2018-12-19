@@ -31,23 +31,24 @@ class App extends Component {
 
   checkWinner(){
   
-    let winner = this.checkMatch(winLines);
+    let winner = this.checkMatch(winLines, this.state.board, this.state.player);
     this.setState({
       winner
     })
-    this.checkTie();
+    // this.checkTie();
     
   }
-  checkMatch(winLines){
+  checkMatch(winLines, newBoard, player){
     let winner = '';
     for(let index = 0; index<winLines.length; index++){
       const[a, b, c] = winLines[index];
-      let board = this.state.board;
-      if(board[a] && board[a] === board[b] && board[a] === board[c]){
+      let board = newBoard;
+      //board[a] && board[a] === board[b] && board[a] === board[c]
+      if(board[a] === player && board[b] === player && board[c] === player){
         let Array = [a, b, c];
         let winArray = Array.map((x) => {return parseInt(x)});
-        console.log(winArray);
-        winner = this.state.player;
+        // console.log(winArray);
+        winner = player;
         this.setState({
           winArray: [...winArray]
         })
@@ -103,10 +104,15 @@ class App extends Component {
   computerTurn(){
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
-    console.log(randomIndex);
+    // console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
+    // let bestIndex = this.bestSpot();
+    console.log('above is best index');
+    // console.log(randomIndex);
+    console.log('about to find out yo');
+    let slowIndex = this.findAiMove(this.state.board);
     if(!this.state.winner && this.state.turn === false && this.state.tie ===false){
-      newBoard[randomIndex] = this.state.player;
+      newBoard[slowIndex] = this.state.player;
       this.setState({
         board: newBoard
       })
@@ -117,25 +123,164 @@ class App extends Component {
       player: this.state.player === "O" ? "X" : "O",
       turn: true
     })
-    this.checkTie();
+    
   }
 
-  minmax(newBoard, player){
-    let availIndexArray = this.getEmptySpots();
-    if(this.checkMatch(winLines, newBoard) === this.state.human){
-      return {score: -10};
-    }else if(this.checkMatch(winLines, newBoard) === this.state.computer){
-      return {score: 10};
-    }else if(this.checkTie()){
-      return {score:0};
-    }
-    let moves = [];
-    for(let i= 0; i<availIndexArray.length; i++){
-      let move = {};
+  // emptySquares(board) {
+  //   return board.filter(s => s === null);
+  // }
+  // bestSpot(){
+  //   return this.minmax(this.state.board, this.state.computer).index;
+  // }
+
+  // minmax(newBoard, player){
+  //   let availSpots = this.emptySquares(newBoard);
+  //   if(this.checkMatch(winLines, newBoard) === this.state.human){
+  //     return {score: -10};
+  //   }else if(this.checkMatch(winLines, newBoard) === this.state.computer){
+  //     return {score: 10};
+  //   }else if(availSpots.length === 0){
+  //     return {score:0};
+  //   }
+  //   let moves = [];
+  //   for(let i= 0; i<availSpots.length; i++){
+  //     let move = {};
+  //     move.index = newBoard[availSpots[i]];
+	// 	  newBoard[availSpots[i]] = player;
+
+  //     if(player === this.state.human){
+  //       let result = this.minmax(newBoard, this.state.human)
+  //       move.score = result.score;
+  //     }else{
+  //       let result = this.minmax(newBoard, this.state.computer)
+  //       move.score = result.score;
+  //     }
+
+  //     newBoard[availSpots[i]] = move.index;
+  //     moves.push(move);
       
+  //   }
+  //   let bestMove;
+  //   if(player === this.state.computer){
+  //     let bestScore = -1000;
+  //     for(let i = 0; i<moves.length; i++){
+  //       if(moves[i].score > bestScore){
+  //         bestScore = moves[i].score;
+  //         bestMove = i;
+  //       }
+  //     }
+  //   }else{
+  //     let bestScore = 1000;
+  //     for(let i=0; i<moves.length; i++){
+  //       if(moves[i].score < bestScore){
+  //         bestScore = moves[i].score;
+  //         bestMove = i;
+  //       }
+  //     }
+  //   }
+  //   return moves[bestMove];
+  // }
+
+//Test for Tie Game
+tie(board) {
+  let moves = board.join('').replace(/ /g, '');
+  if (moves.length === 9) {
+    return true;
+  }
+  return false;
+}  
+ 
+//Create a new version of the board to manipulate as a node on the tree
+copyBoard(board) {
+  //This returns a new copy of the Board and ensures that you're only
+  //manipulating the copies and not the primary board.
+  return board.slice(0);
+}
+
+//Determine if a move is valid and return the new board state
+validMove(move, player, board){
+  let newBoard = this.copyBoard(board);
+  if(newBoard[move] === null){
+    newBoard[move] = player;
+    return newBoard;
+  } else
+    return null;
+}
+
+//This is the main AI function which selects the first position that
+//provides a winning result (or tie if no win possible)
+
+findAiMove(board) {
+  let bestMoveScore = 100;
+  let move = null;
+  //Test Every Possible Move if the game is not already over.
+  if(this.checkMatch(winLines, board, this.state.human) || this.checkMatch(winLines, board, this.state.computer || this.tie(board))) {
+    return null;
+  }
+  for(let i = 0; i < board.length; i++){
+    let newBoard = this.validMove(i, this.state.computer, board);
+    //If validMove returned a valid game board
+    if(newBoard) {
+      let moveScore = this.maxScore(newBoard);
+      if (moveScore < bestMoveScore) {
+        bestMoveScore = moveScore;
+        move = i;
+      }
     }
   }
- 
+  return move;
+}
+
+minScore(board) {
+  if (this.checkMatch(winLines, board, this.state.human)) {
+    return 10;
+  } else if (this.checkMatch(winLines, board, this.state.computer)) {
+    return -10;
+  } else if (this.tie(board)) {
+    return 0;
+  } else {
+    var bestMoveValue = 100;
+    let move = 0;
+    for (let i = 0; i < board.length; i++) {
+      let newBoard = this.validMove(i, this.state.computer, board);
+      if (newBoard) {
+        let predictedMoveValue = this.maxScore(newBoard);
+        if (predictedMoveValue < bestMoveValue) {
+          bestMoveValue = predictedMoveValue;
+          move = i;
+        }
+      }
+    }
+    //console.log("Best Move Value(minScore):", bestMoveValue);
+    return bestMoveValue;
+  }
+}
+
+maxScore(board) {
+   if(this.checkMatch(winLines, board, this.state.human)) {
+    return 10;
+  } else if(this.checkMatch(winLines, board, this.state.computer)) {
+    return -10;
+  } else if(this.tie(board)) {
+    return 0;
+  } else {
+    let bestMoveValue = -100;
+    let move = 0;
+    for (let i = 0; i < board.length; i++) {
+      let newBoard = this.validMove(i, this.state.human, board);
+      if (newBoard) {
+        let predictedMoveValue = this.minScore(newBoard);
+        if (predictedMoveValue > bestMoveValue) {
+          bestMoveValue = predictedMoveValue;
+          move = i;
+        }
+      }
+    }
+    return bestMoveValue;
+  }
+}
+
+
 
   setPlayer(player){
     this.setState({
