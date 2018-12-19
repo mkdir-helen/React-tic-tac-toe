@@ -1,3 +1,5 @@
+//code minmax algorithm from
+// http://douglasberg.com/blog/react/tic-tac-toe/ai/minimax/algorithm/2016/08/29/react-tictactoe-part-2.html
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -104,12 +106,7 @@ class App extends Component {
   computerTurn(){
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
-    // console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
-    // let bestIndex = this.bestSpot();
-    console.log('above is best index');
-    // console.log(randomIndex);
-    console.log('about to find out yo');
     let slowIndex = this.findAiMove(this.state.board);
     if(!this.state.winner && this.state.turn === false && this.state.tie ===false){
       newBoard[slowIndex] = this.state.player;
@@ -126,60 +123,7 @@ class App extends Component {
     
   }
 
-  // emptySquares(board) {
-  //   return board.filter(s => s === null);
-  // }
-  // bestSpot(){
-  //   return this.minmax(this.state.board, this.state.computer).index;
-  // }
-
-  // minmax(newBoard, player){
-  //   let availSpots = this.emptySquares(newBoard);
-  //   if(this.checkMatch(winLines, newBoard) === this.state.human){
-  //     return {score: -10};
-  //   }else if(this.checkMatch(winLines, newBoard) === this.state.computer){
-  //     return {score: 10};
-  //   }else if(availSpots.length === 0){
-  //     return {score:0};
-  //   }
-  //   let moves = [];
-  //   for(let i= 0; i<availSpots.length; i++){
-  //     let move = {};
-  //     move.index = newBoard[availSpots[i]];
-	// 	  newBoard[availSpots[i]] = player;
-
-  //     if(player === this.state.human){
-  //       let result = this.minmax(newBoard, this.state.human)
-  //       move.score = result.score;
-  //     }else{
-  //       let result = this.minmax(newBoard, this.state.computer)
-  //       move.score = result.score;
-  //     }
-
-  //     newBoard[availSpots[i]] = move.index;
-  //     moves.push(move);
-      
-  //   }
-  //   let bestMove;
-  //   if(player === this.state.computer){
-  //     let bestScore = -1000;
-  //     for(let i = 0; i<moves.length; i++){
-  //       if(moves[i].score > bestScore){
-  //         bestScore = moves[i].score;
-  //         bestMove = i;
-  //       }
-  //     }
-  //   }else{
-  //     let bestScore = 1000;
-  //     for(let i=0; i<moves.length; i++){
-  //       if(moves[i].score < bestScore){
-  //         bestScore = moves[i].score;
-  //         bestMove = i;
-  //       }
-  //     }
-  //   }
-  //   return moves[bestMove];
-  // }
+  //////////// MINMAX ALGORITHM //////////////////
 
 //Test for Tie Game
 tie(board) {
@@ -280,7 +224,7 @@ maxScore(board) {
   }
 }
 
-
+///Set player choice of "X" or "O" from the choosePlayer.js
 
   setPlayer(player){
     this.setState({
@@ -290,6 +234,8 @@ maxScore(board) {
     })
   }
 
+  ///the reset button
+  
   reset(){
     this.setState({
       player: null,
