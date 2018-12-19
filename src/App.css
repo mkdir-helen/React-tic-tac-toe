@@ -26,7 +26,7 @@
   display: inline-flex;
   flex-wrap: wrap;
   width: 320px;
-  margin: 50px 0 0 100px;
+  margin: 50px 0 0 50px;
   font-size: 2rem;
 }
 
@@ -35,7 +35,7 @@
 }
 .reset {
   display: block;
-  margin: 40px auto;
+  margin: 40px 0 0 145px;
 }
 .reset:disabled{
   cursor:not-allowed;
