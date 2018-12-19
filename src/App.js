@@ -65,6 +65,9 @@ class App extends Component {
           board: newBoard,
           player: this.state.player === "X" ? "O" : "X",
           turn: false
+        }, ()=>{
+          // this.checkWinner();
+          // this.checkTie();
         })
         this.checkWinner();
         this.checkTie();
