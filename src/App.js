@@ -80,7 +80,7 @@ class App extends Component {
         this.checkWinner();
         this.checkTie();
         
-        setTimeout(()=>this.computerTurn(), 1000);
+        setTimeout(()=>this.computerTurn(), 10);
         
       }
     }
@@ -235,7 +235,7 @@ maxScore(board) {
   }
 
   ///the reset button
-  
+
   reset(){
     this.setState({
       player: null,
