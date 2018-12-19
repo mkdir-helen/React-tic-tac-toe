@@ -40,7 +40,6 @@ class App extends Component {
         let Array = [a, b, c];
         let winArray = Array.map((x) => {return parseInt(x)});
         console.log(winArray);
-        // alert('You won');
         this.setState({
           winner: this.state.player,
           winArray: [...winArray]
@@ -86,19 +85,30 @@ class App extends Component {
     return array;
   }
 
+  randomize(array){
+    for (var i = array.length - 1; i > 0; i--) {
+        var rand = Math.floor(Math.random() * (i + 1));
+    }
+    return rand;
+}
+
   computerTurn(){
     let newBoard = this.state.board;
+    let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
+    console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
-    newBoard[newIndex] = this.state.player;
     if(!this.state.winner && this.state.turn === false){
+      newBoard[randomIndex] = this.state.player;
       this.setState({
-        board: newBoard,
-        player: this.state.player === "O" ? "X" : "O",
-        turn: true
+        board: newBoard
       })
       this.checkWinner();
       this.checkTie();
     }  
+    this.setState({
+      player: this.state.player === "O" ? "X" : "O",
+      turn: true
+    })
   }
  
 
