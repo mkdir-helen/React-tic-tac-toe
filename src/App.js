@@ -11,7 +11,8 @@ class App extends Component {
       player: null,
       winner: null,
       winArray: [],
-      tie: false
+      tie: false,
+      turn: true,
     }
   }
 
@@ -55,21 +56,51 @@ class App extends Component {
       })
     }
   }
-
+  
   handleClick(index){
-    if(this.state.player && !this.state.winner){
+    if(this.state.player && !this.state.winner && this.state.turn === true ){
       let newBoard = this.state.board;
       if(this.state.board[index] === null ){
         newBoard[index] = this.state.player;
         this.setState({
           board: newBoard,
-          player: this.state.player === "X" ? "O" : "X"
+          player: this.state.player === "X" ? "O" : "X",
+          turn: false
         })
         this.checkWinner();
         this.checkTie();
+        
+        setTimeout(()=>this.computerTurn(), 1000);
+        
       }
     }
   }
+
+  getEmptySpots(){
+    let array = [];
+    for(let i=0; i<this.state.board.length; i++){
+      if(this.state.board[i] === null){
+        array.push(i);
+      }
+    }
+    return array;
+  }
+
+  computerTurn(){
+    let newBoard = this.state.board;
+    let newIndex = this.getEmptySpots()[0];
+    newBoard[newIndex] = this.state.player;
+    if(!this.state.winner && this.state.turn === false){
+      this.setState({
+        board: newBoard,
+        player: this.state.player === "O" ? "X" : "O",
+        turn: true
+      })
+      this.checkWinner();
+      this.checkTie();
+    }  
+  }
+ 
 
   setPlayer(player){
     this.setState({
@@ -83,7 +114,8 @@ class App extends Component {
       winner: null,
       board: Array(9).fill(null),
       winArray: [],
-      tie: false
+      tie: false,
+      turn: true,
     })
   }
   renderBoxes(){
@@ -95,6 +127,7 @@ class App extends Component {
       </div>
       )
   }
+
   
   render() {
     
