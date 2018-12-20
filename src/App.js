@@ -106,10 +106,11 @@ class App extends Component {
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
     // console.log(randomIndex);
+    let slowIndex = this.findAiMove(this.state.board); 
     let newIndex = this.getEmptySpots()[0];
     if(!this.state.winner && this.state.turn === false){
       // if(this.state.board[4]===null){
-        newBoard[newIndex] = this.state.player;
+        newBoard[slowIndex] = this.state.player;
       // }else{
       //   newBoard[newIndex] = this.state.player;
       // }
@@ -130,7 +131,106 @@ class App extends Component {
 
   //About to break this thing
   //new code crashing!!!!
-  
+  //////////// MINMAX ALGORITHM //////////////////
+
+  //Test for Tie Game
+  tie(board) {
+    let moves = board.join('').replace(/ /g, '');
+    if (moves.length === 9) {
+      return true;
+    }
+    return false;
+  }
+
+  //Create a new version of the board to manipulate as a node on the tree
+  copyBoard(board) {
+    //This returns a new copy of the Board and ensures that you're only
+    //manipulating the copies and not the primary board.
+    return board.slice(0);
+  }
+
+  //Determine if a move is valid and return the new board state
+  validMove(move, player, board) {
+    let newBoard = this.copyBoard(board);
+    if (newBoard[move] === null) {
+      newBoard[move] = player;
+      return newBoard;
+    } else
+      return null;
+  }
+
+  //This is the main AI function which selects the first position that
+  //provides a winning result (or tie if no win possible)
+
+  findAiMove(board) {
+    let bestMoveScore = 100;
+    let move = null;
+    //Test Every Possible Move if the game is not already over.
+    if (this.checkMatch(winLines, board, this.state.human) || this.checkMatch(winLines, board, this.state.computer || this.tie(board))) {
+      return null;
+    }
+    for (let i = 0; i < board.length; i++) {
+      let newBoard = this.validMove(i, this.state.computer, board);
+      //If validMove returned a valid game board
+      if (newBoard) {
+        let moveScore = this.maxScore(newBoard);
+        if (moveScore < bestMoveScore) {
+          bestMoveScore = moveScore;
+          move = i;
+        }
+      }
+    }
+    return move;
+  }
+
+  minScore(board) {
+    if (this.checkMatch(winLines, board, this.state.human)) {
+      return 10;
+    } else if (this.checkMatch(winLines, board, this.state.computer)) {
+      return -10;
+    } else if (this.tie(board)) {
+      return 0;
+    } else {
+      var bestMoveValue = 100;
+      // let move = 0;
+      for (let i = 0; i < board.length; i++) {
+        let newBoard = this.validMove(i, this.state.computer, board);
+        if (newBoard) {
+          let predictedMoveValue = this.maxScore(newBoard);
+          if (predictedMoveValue < bestMoveValue) {
+            bestMoveValue = predictedMoveValue;
+            // move = i;
+          }
+        }
+      }
+      //console.log("Best Move Value(minScore):", bestMoveValue);
+      return bestMoveValue;
+    }
+  }
+
+  maxScore(board) {
+    if (this.checkMatch(winLines, board, this.state.human)) {
+      return 10;
+    } else if (this.checkMatch(winLines, board, this.state.computer)) {
+      return -10;
+    } else if (this.tie(board)) {
+      return 0;
+    } else {
+      let bestMoveValue = -100;
+      // let move = 0;
+      for (let i = 0; i < board.length; i++) {
+        let newBoard = this.validMove(i, this.state.human, board);
+        if (newBoard) {
+          let predictedMoveValue = this.minScore(newBoard);
+          if (predictedMoveValue > bestMoveValue) {
+            bestMoveValue = predictedMoveValue;
+            // move = i;
+          }
+        }
+      }
+      return bestMoveValue;
+    }
+  }
 
   ////Enough of this code//////
 
