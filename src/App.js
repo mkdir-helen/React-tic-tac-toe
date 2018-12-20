@@ -105,8 +105,6 @@ class App extends Component {
   computerTurn(){
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
-    let minimaxIndex = this.minimax(this.state.board, this.state.computer).index;
-    console.log(minimaxIndex);
     // console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
     if(!this.state.winner && this.state.turn === false){
