@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Player from './choosePlayer';
+import Player from './ChoosePlayer';
 
 class Status extends Component {
     handleSetPlayer(e){
