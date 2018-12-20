@@ -3,6 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 import Status from './components/Status';
 
+let winLines = 
+[
+  ["0", "1", "2"],
+  ["3", "4", "5"],
+  ["6", "7","8"],
+  ["0", "3", "6"],
+  ["1", "4", "7"],
+  ["2", "5", '8'],
+  ['0', '4','8'],
+  ['2', '4', '6']
+]
 class App extends Component {
   constructor(props){
     super(props);
@@ -19,35 +30,29 @@ class App extends Component {
   }
 
   checkWinner(){
-    let winLines = 
-    [
-      ["0", "1", "2"],
-      ["3", "4", "5"],
-      ["6", "7","8"],
-      ["0", "3", "6"],
-      ["1", "4", "7"],
-      ["2", "5", '8'],
-      ['0', '4','8'],
-      ['2', '4', '6']
-    ]
-    this.checkMatch(winLines);
+    let winner = this.checkMatch(winLines, this.state.board, this.state.player);
+    this.setState({
+      winner
+    })
     this.checkTie();
     
   }
-  checkMatch(winLines){
+  checkMatch(winLines, newBoard, player){
+    let winner = null;
     for(let index = 0; index<winLines.length; index++){
       const[a, b, c] = winLines[index];
-      let board = this.state.board;
-      if(board[a] && board[a] === board[b] && board[a] === board[c]){
+      let board = newBoard;
+      if(board[a] === player && board[b] === player && board[c] === player){
         let Array = [a, b, c];
         let winArray = Array.map((x) => {return parseInt(x)});
-        console.log(winArray);
+        winner = player;
         this.setState({
-          winner: this.state.player,
           winArray: [...winArray]
         })
       }
-    }    
+    } 
+    console.log(winner);
+    return winner;   
   }
 
   checkTie(){
