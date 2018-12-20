@@ -13,6 +13,8 @@ class App extends Component {
       winArray: [],
       tie: false,
       turn: true,
+      human: null,
+      computer: null
     }
   }
 
@@ -98,14 +100,14 @@ class App extends Component {
   computerTurn(){
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
-    console.log(randomIndex);
+    // console.log(randomIndex);
     let newIndex = this.getEmptySpots()[0];
     if(!this.state.winner && this.state.turn === false){
-      if(this.state.board[4]===null){
-        newBoard[randomIndex] = this.state.player;
-      }else{
+      // if(this.state.board[4]===null){
         newBoard[newIndex] = this.state.player;
-      }
+      // }else{
+      //   newBoard[newIndex] = this.state.player;
+      // }
       this.setState({
         board: newBoard
       })
@@ -121,7 +123,9 @@ class App extends Component {
 
   setPlayer(player){
     this.setState({
-      player
+      player,
+      human: player,
+      computer: player === "O" ? "X" : "O"
     })
   }
 
@@ -133,6 +137,8 @@ class App extends Component {
       winArray: [],
       tie: false,
       turn: true,
+      computer: null,
+      human: null
     })
   }
   renderBoxes(){
