@@ -105,15 +105,10 @@ class App extends Component {
   computerTurn(){
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
-    // console.log(randomIndex);
     let slowIndex = this.findAiMove(this.state.board); 
     let newIndex = this.getEmptySpots()[0];
     if(!this.state.winner && this.state.turn === false){
-      // if(this.state.board[4]===null){
         newBoard[slowIndex] = this.state.player;
-      // }else{
-      //   newBoard[newIndex] = this.state.player;
-      // }
       this.setState({
         board: newBoard
       })
