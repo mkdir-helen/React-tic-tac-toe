@@ -46,3 +46,15 @@
   color: black;
   cursor:pointer;
 }
+.goofy{
+  margin-top: -280px;
+  margin-left: -250px;
+  opacity: 0.15;
+  z-index: -10;
+}
+.nerd{
+  margin-top: -280px;
+  margin-left: -250px;
+  opacity: 0.15;
+  z-index: -10;
+}

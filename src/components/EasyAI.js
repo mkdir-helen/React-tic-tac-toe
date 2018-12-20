@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Status from './Status';
+import goofy from '../images/melon_guy.jpg';
 
 class EasyAI extends Component {
   constructor(props){
@@ -157,6 +158,7 @@ class EasyAI extends Component {
         />
         <div className="board">
           {this.renderBoxes()}
+          <img className="goofy" src={goofy} alt=""/>
         </div>
         <button disabled={!this.state.winner && this.state.tie === false} 
         onClick={()=> this.reset()}

@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 import '../App.css';
 import Status from './Status';
+import nerd from '../images/power_gamer.jpg';
+
 
 let winLines =
   [
@@ -270,6 +272,7 @@ class HardAI extends Component {
         />
         <div className="board">
           {this.renderBoxes()}
+          <img className="nerd" src={nerd} alt=""/>
         </div>
         <button disabled={!this.state.winner && this.state.tie === false}
           onClick={() => this.reset()}
