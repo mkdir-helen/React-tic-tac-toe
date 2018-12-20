@@ -150,7 +150,8 @@ class EasyAI extends Component {
     
     return (
       <div className="container">
-        <h1>Tic Tac Toe App</h1>
+        <h1>Opponent: Barney Derp</h1>
+        <h3>"Nice shirt you got there."</h3>
         <Status player={this.state.player} 
         setPlayer={(e)=>(this.setPlayer(e))}
         winner={this.state.winner}

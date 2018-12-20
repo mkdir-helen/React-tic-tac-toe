@@ -1,3 +1,8 @@
+h1, h3{
+  text-align: center;
+}
+
+
 .container {
   text-align: center;
 }
@@ -45,6 +50,49 @@
   background: gold;
   color: black;
   cursor:pointer;
+}
+
+.opponents{
+  list-style: none;
+  margin-top: 40px;
+}
+.opponents img{
+  height: 200px;
+  width: 300px;
+}
+.opponents div{
+  width: 300px;
+  margin:  0 auto 30px auto;
+  background: rgba(128, 128, 128, 0.242);
+}
+
+.opponents p{
+  text-align: center;
+  margin-top: 0;
+  padding-bottom: 5px;
+  
+}
+.opponents a{
+  color: black;
+  text-decoration: none;
+}
+.opponents a:hover, .opponents div:active{
+  outline: 3px solid red;
+  
+}
+.opponents .goofus{
+  color: #192b0c;
+}
+.opponents .nerdy{
+  color: #1b1d58;
+}
+
+
+@media only screen and (min-width: 600px) {
+  .opponents {
+    display: flex;
+    justify-content: space-evenly;
+  }
 }
 .goofy{
   margin-top: -280px;

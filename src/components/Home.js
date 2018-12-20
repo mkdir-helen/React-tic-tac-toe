@@ -7,9 +7,9 @@ const Home = (props) => {
         <div>
             <h1>Welcome to the world of tic-tac-toe!</h1>
             <h3>Choose your opponent: </h3>
-            <ul>
-                <li><Link to="/goofus"><img src={goofy} alt="Goofiest guy ever" /> Barney Derp</Link></li>
-                <li><Link to="/nerdy"><img src={nerd} alt="Nerdiest of nerdiest" />Melvin Einstein</Link></li>
+            <ul className="opponents">
+                <li><Link className="goofus" to="/goofus"><div><img src={goofy} alt="Goofiest guy ever" /> <p>Barney Derp</p></div></Link></li>
+                <li><Link className="nerdy" to="/nerdy"><div><img src={nerd} alt="Nerdiest of nerdiest" /><p>Melvin Einstein</p></div></Link></li>
             </ul>
         </div>
     )

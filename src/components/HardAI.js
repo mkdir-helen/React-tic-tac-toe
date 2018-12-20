@@ -6,19 +6,19 @@ import Status from './Status';
 import nerd from '../images/power_gamer.jpg';
 
 
-let winLines =
-  [
-    ["0", "1", "2"],
-    ["3", "4", "5"],
-    ["6", "7", "8"],
-    ["0", "3", "6"],
-    ["1", "4", "7"],
-    ["2", "5", '8'],
-    ['0', '4', '8'],
-    ['2', '4', '6']
-  ]
+let winLines = 
+[
+  ["0", "1", "2"],
+  ["3", "4", "5"],
+  ["6", "7","8"],
+  ["0", "3", "6"],
+  ["1", "4", "7"],
+  ["2", "5", '8'],
+  ['0', '4','8'],
+  ['2', '4', '6']
+]
 class HardAI extends Component {
-  constructor(props) {
+  constructor(props){
     super(props);
     this.state = {
       board: Array(9).fill(null),
@@ -32,98 +32,103 @@ class HardAI extends Component {
     }
   }
 
-  checkWinner() {
-
+  checkWinner(){
     let winner = this.checkMatch(winLines, this.state.board, this.state.player);
     this.setState({
       winner
     })
-    // this.checkTie();
-
+    this.checkTie();
+    
   }
-  checkMatch(winLines, newBoard, player) {
-    let winner = '';
-    for (let index = 0; index < winLines.length; index++) {
-      const [a, b, c] = winLines[index];
+  checkMatch(winLines, newBoard, player){
+    let winner = null;
+    for(let index = 0; index<winLines.length; index++){
+      const[a, b, c] = winLines[index];
       let board = newBoard;
-      //board[a] && board[a] === board[b] && board[a] === board[c]
-      if (board[a] === player && board[b] === player && board[c] === player) {
+      if(board[a] === player && board[b] === player && board[c] === player){
         let Array = [a, b, c];
-        let winArray = Array.map((x) => { return parseInt(x) });
-        // console.log(winArray);
+        let winArray = Array.map((x) => {return parseInt(x)});
         winner = player;
         this.setState({
           winArray: [...winArray]
         })
       }
-    }
-    return winner;
+    } 
+    // console.log(winner);
+    return winner;   
   }
 
-  checkTie() {
-    if (this.state.winner === null && !this.state.board.includes(null)) {
+  checkTie(){
+    if(this.state.winner === null && !this.state.board.includes(null)){
       this.setState({
         tie: true
       })
     }
   }
-
-  handleClick(index) {
-    if (this.state.player && !this.state.winner && this.state.turn === true) {
+  
+  handleClick(index){
+    if(this.state.player && !this.state.winner && this.state.turn === true ){
       let newBoard = this.state.board;
-      if (this.state.board[index] === null) {
+      if(this.state.board[index] === null ){
         newBoard[index] = this.state.player;
         this.setState({
           board: newBoard,
           player: this.state.player === "X" ? "O" : "X",
           turn: false
+        }, ()=>{
+          // this.checkWinner();
+          // this.checkTie();
         })
         this.checkWinner();
         this.checkTie();
-
-        setTimeout(() => this.computerTurn(), 10);
-
+        
+        setTimeout(()=>this.computerTurn(), 1000);
+        
       }
     }
   }
 
-  getEmptySpots() {
+  getEmptySpots(){
     let array = [];
-    for (let i = 0; i < this.state.board.length; i++) {
-      if (this.state.board[i] === null) {
+    for(let i=0; i<this.state.board.length; i++){
+      if(this.state.board[i] === null){
         array.push(i);
       }
     }
     return array;
   }
 
-  randomize(array) {
+  randomize(array){
     for (var i = array.length - 1; i > 0; i--) {
-      var rand = Math.floor(Math.random() * (i + 1));
+        var rand = Math.floor(Math.random() * (i + 1));
     }
     return rand;
-  }
+}
 
-  computerTurn() {
+  computerTurn(){
     let newBoard = this.state.board;
     let randomIndex = this.getEmptySpots()[this.randomize(this.getEmptySpots())];
+    let slowIndex = this.findAiMove(this.state.board); 
     let newIndex = this.getEmptySpots()[0];
-    let slowIndex = this.findAiMove(this.state.board);
-    if (!this.state.winner && this.state.turn === false && this.state.tie === false) {
-      newBoard[slowIndex] = this.state.player;
+    if(!this.state.winner && this.state.turn === false){
+        newBoard[slowIndex] = this.state.player;
       this.setState({
         board: newBoard
       })
       this.checkWinner();
       this.checkTie();
-    }
+    }  
     this.setState({
       player: this.state.player === "O" ? "X" : "O",
       turn: true
     })
-
   }
+ 
 
+
+
+  //About to break this thing
+  //new code crashing!!!!
   //////////// MINMAX ALGORITHM //////////////////
 
   //Test for Tie Game
@@ -185,14 +190,14 @@ class HardAI extends Component {
       return 0;
     } else {
       var bestMoveValue = 100;
-      let move = 0;
+      // let move = 0;
       for (let i = 0; i < board.length; i++) {
         let newBoard = this.validMove(i, this.state.computer, board);
         if (newBoard) {
           let predictedMoveValue = this.maxScore(newBoard);
           if (predictedMoveValue < bestMoveValue) {
             bestMoveValue = predictedMoveValue;
-            move = i;
+            // move = i;
           }
         }
       }
@@ -210,14 +215,14 @@ class HardAI extends Component {
       return 0;
     } else {
       let bestMoveValue = -100;
-      let move = 0;
+      // let move = 0;
       for (let i = 0; i < board.length; i++) {
         let newBoard = this.validMove(i, this.state.human, board);
         if (newBoard) {
           let predictedMoveValue = this.minScore(newBoard);
           if (predictedMoveValue > bestMoveValue) {
             bestMoveValue = predictedMoveValue;
-            move = i;
+            // move = i;
           }
         }
       }
@@ -225,9 +230,9 @@ class HardAI extends Component {
     }
   }
 
-  ///Set player choice of "X" or "O" from the choosePlayer.js
+  ////Enough of this code//////
 
-  setPlayer(player) {
+  setPlayer(player){
     this.setState({
       player,
       human: player,
@@ -235,9 +240,7 @@ class HardAI extends Component {
     })
   }
 
-  ///the reset button
-
-  reset() {
+  reset(){
     this.setState({
       player: null,
       winner: null,
@@ -249,34 +252,35 @@ class HardAI extends Component {
       human: null
     })
   }
-  renderBoxes() {
+  renderBoxes(){
     return this.state.board.map(
-      (box, index) =>
-        <div className="box" key={index}
-          onClick={() => this.handleClick(index)}>
-          {box}
-        </div>
-    )
+      (box, index) => 
+      <div className="box" key={index} 
+        onClick={() => this.handleClick(index)}>
+        {box}
+      </div>
+      )
   }
 
-
+  
   render() {
-
+    
     return (
       <div className="container">
-        <h1>Tic Tac Toe App</h1>
-        <Status player={this.state.player}
-          setPlayer={(e) => (this.setPlayer(e))}
-          winner={this.state.winner}
-          tie={this.state.tie}
+        <h1>Opponent: Melvin Einstein </h1>
+        <h3>"Hold on...ugh I know I got this...I need to think..."</h3>
+        <Status player={this.state.player} 
+        setPlayer={(e)=>(this.setPlayer(e))}
+        winner={this.state.winner}
+        tie={this.state.tie}
         />
         <div className="board">
           {this.renderBoxes()}
           <img className="nerd" src={nerd} alt=""/>
         </div>
-        <button disabled={!this.state.winner && this.state.tie === false}
-          onClick={() => this.reset()}
-          className="reset">Reset</button>
+        <button disabled={!this.state.winner && this.state.tie === false} 
+        onClick={()=> this.reset()}
+        className="reset">Reset</button>
       </div>
     );
   }
